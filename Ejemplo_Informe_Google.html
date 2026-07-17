@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte de Reconocimiento Pasivo: Auditoría Estándar</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; color: #333; margin: 0; padding: 40px; }
+        .container { max-width: 1000px; background: white; margin: auto; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h1 { color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; font-size: 26px; }
+        h2 { color: #334155; margin-top: 40px; font-size: 18px; border-left: 4px solid #1e293b; padding-left: 10px; }
+        .meta { background: #f8fafc; padding: 15px; border-radius: 6px; margin-bottom: 30px; font-size: 14px; color: #64748b; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background-color: #f1f5f9; color: #475569; font-weight: 600; }
+        .badge { padding: 6px 12px; border-radius: 50px; font-size: 11px; font-weight: bold; display: inline-block; }
+        .badge-success { background-color: #dcfce7; color: #15803d; }
+        .badge-warning { background-color: #fef9c3; color: #a16207; }
+        .badge-danger { background-color: #fee2e2; color: #b91c1c; }
+        footer { margin-top: 50px; text-align: center; font-size: 12px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Informe de Reconocimiento Pasivo y Análisis Semántico Perimetral</h1>
+        <div class="meta">
+            <strong>Objetivo Evaluado:</strong> https://www.google.com/<br>
+            <strong>Fecha de Análisis:</strong> 2026-07-17 18:55:58<br>
+            <strong>Estado / Tipo de Contexto:</strong> Auditoría Estándar<br>
+            <strong>Alcance Técnico:</strong> Inspección Semántica Completa y Detección de Fugas de Información
+        </div>
+
+        <h2>1. Análisis de Cabeceras HTTP Expuestas</h2>
+        <table>
+            <thead><tr><th>Cabecera Analizada</th><th>Estado</th><th>Detalles Técnicos y Diagnóstico</th></tr></thead>
+            <tbody>
+        <tr>
+            <td><strong>Content-Security-Policy</strong></td>
+            <td><span class="badge badge-danger">FALTA</span></td>
+            <td>Ausente. La aplicación está altamente expuesta a ataques XSS (Cross-Site Scripting) e inyección de datos maliciosos en el DOM.</td>
+        </tr>
+        <tr>
+            <td><strong>X-Frame-Options</strong></td>
+            <td><span class="badge badge-success">CORRECTO (SAMEORIGIN)</span></td>
+            <td>Protección activa contra ataques de secuestro de clics (Clickjacking).</td>
+        </tr>
+        <tr>
+            <td><strong>Strict-Transport-Security (HSTS)</strong></td>
+            <td><span class="badge badge-success">CORRECTO</span></td>
+            <td>Fuerza de manera segura conexiones cifradas HTTPS. (Se recomienda añadir 'includeSubDomains' para proteger subdominios)</td>
+        </tr>
+        <tr>
+            <td><strong>X-Content-Type-Options</strong></td>
+            <td><span class="badge badge-warning">FALTA</span></td>
+            <td>Ausente. Los navegadores podrían intentar adivinar el tipo de contenido cargado, permitiendo ejecuciones de código malicioso camuflado en archivos estáticos.</td>
+        </tr>
+        <tr>
+            <td><strong>Referrer-Policy</strong></td>
+            <td><span class="badge badge-warning">FALTA</span></td>
+            <td>Ausente. El navegador aplicará el comportamiento por defecto, lo que podría exponer rutas internas de la aplicación en las peticiones salientes hacia enlaces externos.</td>
+        </tr></tbody>
+        </table>
+
+        <h2>2. Auditoría de Parámetros en Cookies de Respuesta</h2>
+        <table>
+            <thead><tr><th>Identificador Cookie</th><th>Secure</th><th>HttpOnly</th><th>SameSite</th></tr></thead>
+            <tbody>
+            <tr>
+                <td><code style="color:#c7254e; background-color:#f9f2f4; padding:2px 6px; border-radius:4px;">__Secure-STRP</code></td>
+                <td><span class="badge badge-success">Correcto (HTTPS)</span></td>
+                <td><span class="badge badge-danger">FALTA (Vulnerable a lectura vía script/XSS)</span></td>
+                <td><span class="badge badge-success">Configurado (strict)</span></td>
+            </tr>
+            <tr>
+                <td><code style="color:#c7254e; background-color:#f9f2f4; padding:2px 6px; border-radius:4px;">AEC</code></td>
+                <td><span class="badge badge-success">Correcto (HTTPS)</span></td>
+                <td><span class="badge badge-success">Correcto (Protegida)</span></td>
+                <td><span class="badge badge-success">Configurado (lax)</span></td>
+            </tr>
+            <tr>
+                <td><code style="color:#c7254e; background-color:#f9f2f4; padding:2px 6px; border-radius:4px;">NID</code></td>
+                <td><span class="badge badge-success">Correcto (HTTPS)</span></td>
+                <td><span class="badge badge-success">Correcto (Protegida)</span></td>
+                <td><span class="badge badge-warning">Actual: none (Riesgo potencial de CSRF)</span></td>
+            </tr></tbody>
+        </table>
+
+        <h2>3. Detección de Fugas de Información (Fingerprinting)</h2>
+        <table>
+            <thead><tr><th>Componente Evaluado</th><th>Firma Detectada</th><th>Recomendación de Remediación</th></tr></thead>
+            <tbody>
+        <tr>
+            <td><strong>Server</strong></td>
+            <td><span class="badge badge-warning">gws</span></td>
+            <td>Fuga parcial de información. Expone el software utilizado. Se recomienda enmascarar por completo el valor en producción.</td>
+        </tr>
+        <tr>
+            <td><strong>X-Powered-By</strong></td>
+            <td><span class="badge badge-success">Oculto / Protegido</span></td>
+            <td>Correcto. No se detectan tecnologías de backend expuestas de manera pasiva.</td>
+        </tr></tbody>
+        </table>
+
+        <footer>Módulo de Reconocimiento Pasivo y Resiliencia Perimetral - Toolkit Profesional de Pentesting.</footer>
+    </div>
+</body>
+</html>
